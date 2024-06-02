@@ -1,0 +1,71 @@
+version: '3.8'
+
+x-project:
+  name: "opcua-to-rest"
+
+services:
+  opcrouter:
+    image: opcrouter/runtime:5.2
+    pull_policy: always
+    depends_on:
+      init-config:
+        condition: service_completed_successfully
+    environment:
+      - OR_I_ACCEPT_EULA=true
+      - OR_IMPORT_SOURCE=/inray/project.rpe
+      - INITIAL_USERNAME=${INITIAL_USERNAME}
+      - INITIAL_PASSWORD=${INITIAL_PASSWORD}
+    ports:
+      - "40281:8080"
+    networks:
+      - stack-network
+    volumes:
+      - opcrouter-data:/data
+      - opcrouter-config:/inray
+
+  opc-ua-plc:
+    image: mcr.microsoft.com/iotedge/opc-plc:latest
+    command: "--autoaccept --veryfastrate=50"
+    networks:
+      - stack-network
+  
+  webhook-tester:
+    image: tarampampam/webhook-tester:latest
+    ports:
+      - "40282:8080"
+    environment:
+      - CREATE_SESSION=00000000-0000-0000-0000-000000000000
+    networks:
+      - stack-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "40280:80"
+    volumes:
+      - dashboard:/usr/share/nginx/html:ro
+    networks:
+      - stack-network
+    depends_on:
+      - init-config
+
+  init-config:
+    image: alpine
+    command: >
+      sh -c "wget https://github.com/OPC-Router/portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
+             unzip -qo /tmp/repo.zip -d /tmp &&
+             cp /tmp/opc-router-portainer-templates-main/opcua-to-rest/config/opc-router.rpe /inray/project.rpe &&
+             cp -r /tmp/opc-router-portainer-templates-main/opcua-to-rest/config/dashboard/* /dashboard/"
+    volumes:
+      - opcrouter-config:/inray
+      - dashboard:/dashboard
+    networks:
+      - stack-network
+
+networks:
+  stack-network:
+
+volumes:
+  opcrouter-config:
+  opcrouter-data:
+  dashboard:

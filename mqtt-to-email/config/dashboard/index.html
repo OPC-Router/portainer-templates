@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT to Email Stack</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <div class="container-md mt-5">
+        <h1 class="text-center mb-5">MQTT to Email Stack</h1>
+        <div style="max-width: 800px;" class="card mt-2 mx-auto bg-body-tertiary">
+            <div class="card-body">
+                <h5 class="card-title ">E-Mail test Formular</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">You can use this form, to send an E-Mail via MQTT to
+                    the <strong>simulation e-mail inbox</strong>
+                </h6>
+                <form id="emailForm" class="mt-4">
+                    <div class="mb-3 row">
+                        <label for="sender" class="col-sm-2 col-form-label">From:</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="sender" name="sender"
+                                value="opcrouter@docker.local" disabled readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="receiver" class="col-sm-2 col-form-label">To:</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input class="form-control" id="receiver" name="receiver" value="webform" required>
+                                <span class="input-group-text">@simulation-inbox.docker</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="message" class="col-sm-2 col-form-label">Message</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="message" name="message" rows="11" required>
+Hello Simulation-Inbox,
+
+this message was sent via the MQTT to Email Stack.
+The OPC Router received this Text via a REST API and sent the message to the MQTT Broker.
+
+A MQTT-Trigger in the OPC Router received the message via the MQTT Broker and sent this message via the Email Plug-In to the Simulation-Inbox.
+
+Best Regards,
+OPC Router</textarea>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col-sm-2">&nbsp;</div>
+                        <div class="col-sm-10">
+
+                            <button type="submit" class="btn btn-primary">Send</button>
+                            <button type="button" class="btn btn-outline-primary ms-2"
+                                onclick="window.open('http://localhost:40382/', '_blank')">
+                                <i class="bi bi-box-arrow-up-right"></i> Open Email Inbox
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="alert alert-info mt-5" role="alert">
+            Default username: <strong>admin</strong> <span class="d-none d-sm-inline">|</span><br class="d-sm-none" />
+            Default password: <strong>OPCRouterStack</strong>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4 mb-3">
+                <div class="card h-100">
+                    <img src="img/opc-router-logo-2x-400x108.webp" style="max-width: 300px;"
+                        class="card-img-top mx-auto p-4" alt="OPC Router Logo">
+                    <div class="card-body pb-0">
+                        <h5 class="card-title">OPC Router</h5>
+                        <p class="card-text">The OPC Router connects to an MQTT Broker, receives messages, and sends
+                            email notifications based on the received data.</p>
+                        <h6>Used Plug-Ins</h6>
+                        <ul>
+                            <li><a href="https://www.opc-router.com/mqtt-client-plug-in_en/" target="_blank">MQTT Client
+                                    Plug-in</a></li>
+                            <li><a href="https://www.opc-router.com/email-notification-with-opc-ua_en/"
+                                    target="_blank">E-Mail Plug-In</a></li>
+                        </ul>
+                    </div>
+                    <a href="http://localhost:40381" target="_blank" class="btn btn-primary mt-0 m-3">Open OPC Router
+                        Web-Management</a>
+                </div>
+            </div>
+            <div class="col-sm-4 mb-3">
+                <div class="card h-100">
+                    <img src="img/cedalo-logo-red.png" style="max-width: 300px;" class="card-img-top mx-auto p-4"
+                        alt="MQTT Logo">
+                    <div class="card-body pb-0">
+                        <h5 class="card-title">MQTT Web Management</h5>
+                        <p class="card-text">Cedalo Web Management provides a user-friendly interface for managing and
+                            monitoring the MQTT Broker.</p>
+                    </div>
+                    <a href="http://localhost:40388" target="_blank" class="btn btn-primary mt-0 m-3">Open MQTT
+                        Web-Management</a>
+                </div>
+            </div>
+            <div class="col-sm-4 mb-3">
+                <div class="card h-100">
+                    <img src="img/email_icon_128.webp" style="max-width: 300px;" class="card-img-top mx-auto p-4"
+                        alt="Email Logo">
+                    <div class="card-body pb-0">
+                        <h5 class="card-title">E-Mail Inbox</h5>
+                        <p class="card-text">The Email Inbox Simulator (SMTP4DEV) allows you to test and view emails
+                            sent by the OPC Router's Email Plug-In in a simulated environment.</p>
+                    </div>
+                    <a href="http://localhost:40382" target="_blank" class="btn btn-primary mt-0 m-3">Open Email
+                        Inbox</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <h2>Contact Us</h2>
+            <p>If you have any questions, would like to request pricing information, or need a license for continuous
+                operation exceeding 2 hours, please contact inray. We are here to assist you with any inquiries or
+                special requirements you may have.</p>
+            <div class="row pt-4 pb-4 bg-light-subtle">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <script charset="utf-8" type="text/javascript"
+                        src="//js-eu1.hsforms.net/forms/embed/v2.js"></script>
+                    <script>
+                        hbspt.forms.create({
+                            region: "eu1",
+                            portalId: "144754105",
+                            formId: "8c8ba1df-867f-43ef-b92e-81b93255a9c2"
+                        });
+                    </script>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+            <img src="img/inray-logo.svg" style="max-width: 200px;" class="card-img-top mx-auto p-4" alt="inray Logo">
+            <div class="row">
+                <div class="col-sm-4 mb-3">
+                    <div class="card border-0">
+                        <div class="card-body">
+                            <h5 class="card-title"></h5>
+
+                            <p class="card-text text-nowrap text-truncate">
+                                inray Industriesoftware GmbH<br />
+                                Holstenstraße 40<br /> 25560 Schenefeld<br /> Germany</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 mb-3">
+                    <div class="card border-0">
+                        <div class="card-body">
+                            <h5 class="card-title">Contact</h5>
+                            <p class="card-text text-nowrap text-truncate">Phone: +49 4892 89008 160<br>
+                                Email: <a href="mailto:cc@inray.de">cc@inray.de</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 mb-3">
+                    <div class="card border-0">
+                        <div class="card-body">
+                            <h5 class="card-title">Support</h5>
+                            <p class="card-text text-nowrap text-truncate">Phone: +49 4892 89008 20<br>
+                                Email: <a href="mailto:cc@inray.de">support@inray.de</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="toast-container position-fixed top-50 start-50 translate-middle p-3" style="z-index: 11">
+            <div id="liveToast" class="toast fade" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="toastHeader" class="toast-header">
+                    <svg id="successIcon" xmlns="http://www.w3.org/2000/svg" class="me-2" width="20" height="20"
+                        fill="currentColor" class="bi bi-envelope-check-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.026A2 2 0 0 0 2 14h6.256A4.5 4.5 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586zM16 4.697v4.974A4.5 4.5 0 0 0 12.5 8a4.5 4.5 0 0 0-1.965.45l-.338-.207z" />
+                        <path
+                            d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686" />
+                    </svg>
+
+                    <svg id="alertIcon" xmlns="http://www.w3.org/2000/svg" class="me-2" width="20" height="20"
+                        fill="currentColor" class="bi bi-envelope-exclamation-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.026A2 2 0 0 0 2 14h6.256A4.5 4.5 0 0 1 8 12.5a4.49 4.49 0 0 1 1.606-3.446l-.367-.225L8 9.586zM16 4.697v4.974A4.5 4.5 0 0 0 12.5 8a4.5 4.5 0 0 0-1.965.45l-.338-.207z" />
+                        <path
+                            d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1.5a.5.5 0 0 1-1 0V11a.5.5 0 0 1 1 0m0 3a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
+                    </svg>
+                    <strong id="toastTitle" class="me-auto">Notification</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body" id="toastBody"></div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function () {
+                $('#emailForm').submit(function (event) {
+                    event.preventDefault(); // Prevent default form submission
+                    var receiver = encodeURIComponent($('#receiver').val() + '@simulation-inbox.docker');
+                    var message = encodeURIComponent($('#message').val());
+                    var url = `http://localhost:40383/api/SendMailForm?receiver=${receiver}&message=${message}`;
+
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        success: function (response) {
+                            showToast('Email sent successfully!', 'success');
+                        },
+                        error: function (xhr, status, error) {
+                            showToast('Error sending email. Please try again.', 'danger');
+                        }
+                    });
+                });
+
+                function showToast(message, type) {
+                    var toastTitle = type === 'success' ? 'Success' : 'Error';
+                    var toastHeaderClass = type === 'success' ? 'bg-success-subtle text-success-emphasis' : 'bg-danger-subtle text-danger-emphasis';
+                    var successIcon = $('#successIcon');
+                    var alertIcon = $('#alertIcon');
+
+                    $('#toastHeader').removeClass('bg-success-subtle text-success-emphasis bg-danger-subtle text-danger-emphasis').addClass(toastHeaderClass);
+                    $('#toastTitle').text(toastTitle);
+                    $('#toastBody').text(message);
+
+                    if (type === 'success') {
+                        successIcon.removeClass('d-none');
+                        alertIcon.addClass('d-none');
+                    } else {
+                        successIcon.addClass('d-none');
+                        alertIcon.removeClass('d-none');
+                    }
+
+                    var toastElement = new bootstrap.Toast(document.getElementById('liveToast'));
+                    toastElement.show();
+                }
+            });
+        </script>
+</body>
+
+</html>

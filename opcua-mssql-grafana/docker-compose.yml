@@ -1,0 +1,123 @@
+version: "3.8"
+
+x-project:
+  name: "opcua-mssql-grafana"
+
+services:
+  opcrouter:
+    image: opcrouter/runtime:5.2
+    pull_policy: always
+    depends_on:
+      init-config:
+        condition: service_completed_successfully
+      mssql_setup:
+        condition: service_completed_successfully
+    environment:
+      - OR_I_ACCEPT_EULA=true
+      - OR_IMPORT_SOURCE=/inray/project.rpe
+      - INITIAL_USERNAME=${INITIAL_USERNAME}
+      - INITIAL_PASSWORD=${INITIAL_PASSWORD}
+    ports:
+      - "40681:8080"
+    networks:
+      - stack-network
+    volumes:
+      - opcrouter-data:/data
+      - opcrouter-config:/inray
+
+  umati:
+    image: ghcr.io/umati/sample-server:v1.0.5
+    expose:
+      - "4840"
+    networks:
+      - stack-network
+
+  grafana:
+    image: grafana/grafana-oss:11.0.0
+    ports:
+      - 40630:3000
+    environment: 
+      GF_SECURITY_ADMIN_USER: ${INITIAL_USERNAME}
+      GF_SECURITY_ADMIN_PASSWORD: ${INITIAL_PASSWORD}
+    volumes:
+      - grafana:/etc/grafana
+    networks:
+      - stack-network
+    depends_on:
+      mssql:
+        condition: service_started
+      mssql_setup:
+        condition: service_completed_successfully
+      init-config:
+        condition: service_completed_successfully
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    expose:
+      - "1433"
+    depends_on:
+      init-config:
+        condition: service_completed_successfully
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "?Super3Secure2Password1!"
+    networks:
+      - stack-network
+  
+  mssql_setup:
+    image: mcr.microsoft.com/mssql/server
+    
+    entrypoint: /bin/bash
+    command: /setup-config/mssql_setup.sh
+    environment:
+      MSSQL_HOST: "mssql"
+      MSSQL_USERNAME: "SA"
+      MSSQL_PASSWORD: "?Super3Secure2Password1!"
+    volumes:
+      - mssql-config:/setup-config
+    networks:
+      - stack-network
+    depends_on:
+      mssql:
+        condition: service_started
+      init-config:
+        condition: service_completed_successfully
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "40680:80"
+    volumes:
+      - dashboard:/usr/share/nginx/html:ro
+    depends_on:
+      - init-config
+
+  init-config:
+    image: alpine
+    command: >
+      sh -c "wget https://github.com/OPC-Router/opc-ua-umati-mssql-grafana/archive/refs/heads/main.zip -O /tmp/umati-repo.zip &&
+             unzip -oq /tmp/umati-repo.zip -d /tmp &&
+             cp /tmp/opc-ua-umati-mssql-grafana-main/umati.rpe /opcrouter/project.rpe &&
+             cp /tmp/opc-ua-umati-mssql-grafana-main/mssql_setup.sh /mssql/mssql_setup.sh &&
+             sed -i '/sleep infinity/d' /mssql/mssql_setup.sh &&
+             cp -r /tmp/opc-ua-umati-mssql-grafana-main/grafana/* /grafana/ &&
+             mkdir -p /grafana/dashboards &&
+             cp /tmp/opc-ua-umati-mssql-grafana-main/grafana/MachineProductivity.json /grafana/dashboards/MachineProductivity.json &&
+             wget https://github.com/OPC-Router/portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
+             unzip -qo /tmp/repo.zip -d /tmp &&
+             cp -r /tmp/opc-router-portainer-templates-main/opcua-mssql-grafana/config/dashboard/* /dashboard/"
+    volumes:
+      - mssql-config:/mssql
+      - opcrouter-config:/opcrouter
+      - dashboard:/dashboard
+      - grafana:/grafana
+
+networks:
+  stack-network:
+
+volumes:
+  opcrouter-config:
+  opcrouter-data:
+  dashboard:
+  grafana:
+  mssql-config:

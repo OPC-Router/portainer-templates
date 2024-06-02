@@ -1,0 +1,82 @@
+version: '3.8'
+
+x-project:
+  name: "opcua-to-influx"
+
+services:
+  opcrouter:
+    image: opcrouter/runtime:5.2
+    pull_policy: always
+    depends_on:
+      init-config:
+        condition: service_completed_successfully
+    environment:
+      - OR_I_ACCEPT_EULA=true
+      - OR_IMPORT_SOURCE=/inray/project.rpe
+      - INITIAL_USERNAME=${INITIAL_USERNAME}
+      - INITIAL_PASSWORD=${INITIAL_PASSWORD}
+    ports:
+      - "40181:8080"
+    networks:
+      - stack-network
+    volumes:
+      - opcrouter-data:/data
+      - opcrouter-config:/inray
+
+  opc-ua-plc:
+    image: mcr.microsoft.com/iotedge/opc-plc:latest
+    command: "--autoaccept --veryfastrate=50"
+    networks:
+      - stack-network
+
+  influxdb:
+    image: influxdb:latest
+    ports:
+      - "40186:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INITIAL_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INITIAL_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=opcrouter
+      - DOCKER_INFLUXDB_INIT_BUCKET=opcua
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=OPCUA2InfluxDbAuthToken
+      - DOCKER_INFLUXDB_INIT_RETENTION=1w
+    networks:
+      - stack-network
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "40180:80"
+    volumes:
+      - dashboard:/usr/share/nginx/html:ro
+    networks:
+      - stack-network
+    depends_on:
+      - init-config
+
+  init-config:
+    image: alpine
+    command: >
+      sh -c "wget https://github.com/OPC-Router/portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
+             unzip -qo /tmp/repo.zip -d /tmp &&
+             cp /tmp/opc-router-portainer-templates-main/opcua-to-influx/config/opc-router.rpe /inray/project.rpe &&
+             cp -r /tmp/opc-router-portainer-templates-main/opcua-to-influx/config/dashboard/* /dashboard/"
+    volumes:
+      - opcrouter-config:/inray
+      - dashboard:/dashboard
+    networks:
+      - stack-network
+
+networks:
+  stack-network:
+
+volumes:
+  opcrouter-config:
+  opcrouter-data:
+  influxdb-data:
+  influxdb-config:
+  dashboard:

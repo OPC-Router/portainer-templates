@@ -1,0 +1,99 @@
+version: "3.8"
+
+x-project:
+  name: "mqtt-to-email"
+
+services:
+  opcrouter:
+    image: opcrouter/runtime:5.2
+    pull_policy: always
+    depends_on:
+      init-config:
+        condition: service_completed_successfully
+    environment:
+      - OR_I_ACCEPT_EULA=true
+      - OR_IMPORT_SOURCE=/inray/project.rpe
+      - INITIAL_USERNAME=${INITIAL_USERNAME}
+      - INITIAL_PASSWORD=${INITIAL_PASSWORD}
+    ports:
+      - "40381:8080"
+      - "40383:46065"
+    networks:
+      - stack-network
+    volumes:
+      - opcrouter-data:/data
+      - opcrouter-config:/inray
+
+  mqtt-broker:
+    image: eclipse-mosquitto:latest
+    depends_on:
+      init-config:
+        condition: service_completed_successfully
+    networks:
+      - stack-network
+    volumes:
+      - mosquitto-config:/mosquitto/config
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-log:/mosquitto/log
+
+  cedalo-mgmt:
+    image: cedalo/management-center:2
+    depends_on:
+      mqtt-broker:
+        condition: service_started
+    environment:
+      CEDALO_MC_BROKER_ID: mosquitto-2.0
+      CEDALO_MC_BROKER_NAME: Mosquitto 2.0
+      CEDALO_MC_BROKER_URL: mqtt://mqtt-broker:1883
+      CEDALO_MC_BROKER_USERNAME:
+      CEDALO_MC_BROKER_PASSWORD:
+      CEDALO_MC_USERNAME: ${INITIAL_USERNAME}
+      CEDALO_MC_PASSWORD: ${INITIAL_PASSWORD}
+    ports:
+      - "40388:8088"
+    networks:
+      - stack-network
+
+  smtp4dev:
+    image: rnwood/smtp4dev:latest
+    ports:
+      - "40382:80"
+    networks:
+      - stack-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "40380:80"
+    volumes:
+      - dashboard:/usr/share/nginx/html:ro
+    networks:
+      - stack-network
+    depends_on:
+      - init-config
+
+  init-config:
+    image: alpine
+    command: >
+      sh -c "wget https://github.com/OPC-Router/portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
+             unzip -oq /tmp/repo.zip -d /tmp &&
+             cp /tmp/opc-router-portainer-templates-main/mqtt-to-email/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
+             cp /tmp/opc-router-portainer-templates-main/mqtt-to-email/config/opc-router.rpe /inray/project.rpe &&
+             cp -r /tmp/opc-router-portainer-templates-main/mqtt-to-email/config/dashboard/* /dashboard/"
+    volumes:
+      - mosquitto-config:/mosquitto/config
+      - opcrouter-config:/inray
+      - dashboard:/dashboard
+    networks:
+      - stack-network
+
+networks:
+  stack-network:
+
+volumes:
+  mosquitto-config:
+  mosquitto-data:
+  mosquitto-log:
+  opcrouter-config:
+  opcrouter-data:
+  dashboard:

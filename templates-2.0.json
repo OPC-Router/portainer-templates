@@ -1,0 +1,201 @@
+{
+  "version": "2",
+  "templates": [
+    {
+      "type": 3,
+      "title": "OPC UA to MQTT Stack",
+      "description": "This stack deploys an OPC UA PLC simulation, OPC Router, Mosquitto MQTT broker, and a mqtt management.",
+      "note": "This stack sets up an OPC UA PLC simulation, OPC Router for data handling, Mosquitto MQTT broker for messaging, and a management from cedalo.<br/><br/><hr/><strong>After deployment</strong>, you can access the OPC Router and cedalo management via the exposed ports.<br/ ><h4><a href='http://localhost:40080'>Open the stack dashboard http://localhost:40080 after successfull deployment</a></h4>",
+      "categories": [
+        "edge",
+        "messaging",
+        "dashboard"
+      ],
+      "platform": "linux",
+      "name": "opcua-to-mqtt",
+      "logo": "https://raw.githubusercontent.com/OPC-Router/portainer-templates/main/images/opc-router-logo-500x500.png",
+      "repository": {
+        "url": "https://github.com/OPC-Router/portainer-templates",
+        "stackfile": "opcua-to-mqtt/docker-compose.yml"
+      },
+      "env": [
+        {
+          "name": "INITIAL_USERNAME",
+          "label": "Initial Admin User",
+          "description": "The initial username for the OPC Router and cedalo admin user.",
+          "default": "admin"
+        },
+        {
+          "name": "INITIAL_PASSWORD",
+          "label": "Initial Admin Password",
+          "description": "The initial password for the OPC Router and cedalo admin user. The password must be at least 12 characters long.",
+          "default": "OPCRouterStack"
+        },
+        {
+          "name": "OR_I_ACCEPT_EULA",
+          "label": "Accept EULA",
+          "description": "Accept the End User License Agreement",
+          "default": "true",
+          "preset": true
+        }
+      ]
+    },
+    {
+      "type": 3,
+      "title": "OPC UA to InfluxDB Stack",
+      "description": "This stack deploys an OPC UA PLC simulation, OPC Router, and InfluxDB.",
+      "note": "This stack sets up an OPC UA PLC simulation, OPC Router for data handling, and InfluxDB for data storage.<br/><br/><hr/><strong>After deployment</strong>, you can access the OPC Router and InfluxDB via the exposed ports.<br/ ><h4><a href='http://localhost:40180'>Open the stack dashboard http://localhost:40180 after successfull deployment</a></h4>",
+      "categories": [
+        "edge",
+        "database",
+        "monitoring"
+      ],
+      "platform": "linux",
+      "name": "opcua-to-influx",
+      "logo": "https://raw.githubusercontent.com/OPC-Router/portainer-templates/main/images/opc-router-logo-500x500.png",
+      "repository": {
+        "url": "https://github.com/OPC-Router/portainer-templates",
+        "stackfile": "opcua-to-influx/docker-compose.yml"
+      },
+      "env": [
+        {
+          "name": "INITIAL_USERNAME",
+          "label": "Initial Admin User",
+          "description": "The initial username for the OPC Router and influxDB admin user.",
+          "default": "admin"
+        },
+        {
+          "name": "INITIAL_PASSWORD",
+          "label": "Initial Admin Password",
+          "description": "The initial password for the OPC Router and influxDB admin user. The password must be at least 12 characters long.",
+          "default": "OPCRouterStack"
+        },
+        {
+          "name": "OR_I_ACCEPT_EULA",
+          "label": "Accept EULA",
+          "description": "Accept the End User License Agreement",
+          "default": "true",
+          "preset": true
+        }
+      ]
+    },
+    {
+      "type": 3,
+      "title": "OPC UA to REST Stack",
+      "description": "This stack deploys an OPC UA PLC simulation, OPC Router, and a Webhook Tester.",
+      "note": "This stack sets up an OPC UA PLC simulation, OPC Router for data handling, and a Webhook Tester for REST endpoint simulation.<br/><br/><hr/><strong>After deployment</strong>, you can access the OPC Router and Webhook Tester via the exposed ports.<br/ ><h4><a href='http://localhost:40280'>Open the stack dashboard http://localhost:40280 after successfull deployment</a></h4>",
+      "categories": [
+        "edge",
+        "web",
+        "api"
+      ],
+      "platform": "linux",
+      "name": "opcua-to-rest",
+      "logo": "https://raw.githubusercontent.com/OPC-Router/portainer-templates/main/images/opc-router-logo-500x500.png",
+      "repository": {
+        "url": "https://github.com/OPC-Router/portainer-templates",
+        "stackfile": "opcua-to-rest/docker-compose.yml"
+      },
+      "env": [
+        {
+          "name": "INITIAL_USERNAME",
+          "label": "Initial Admin User",
+          "description": "The initial username for the OPC Router admin user.",
+          "default": "admin"
+        },
+        {
+          "name": "INITIAL_PASSWORD",
+          "label": "Initial Admin Password",
+          "description": "The initial password for the OPC Router admin user. The password must be at least 12 characters long.",
+          "default": "OPCRouterStack"
+        },
+        {
+          "name": "OR_I_ACCEPT_EULA",
+          "label": "Accept EULA",
+          "description": "Accept the End User License Agreement",
+          "default": "true",
+          "preset": true
+        }
+      ]
+    },
+    {
+      "type": 3,
+      "title": "MQTT to Email Stack",
+      "description": "This stack deploys an OPC Router, Mosquitto MQTT broker, and smtp4dev.",
+      "note": "This stack sets up an OPC Router for data handling, Mosquitto MQTT broker for messaging, and smtp4dev for email testing.<br/><br/><hr/><strong>After deployment</strong>, you can access the OPC Router and smtp4dev via the exposed ports.<br/ ><h4><a href='http://localhost:40380'>Open the stack dashboard http://localhost:40380 after successfull deployment</a></h4>",
+      "categories": [
+        "messaging",
+        "email",
+        "testing"
+      ],
+      "platform": "linux",
+      "name": "mqtt-to-email",
+      "logo": "https://raw.githubusercontent.com/OPC-Router/portainer-templates/main/images/opc-router-logo-500x500.png",
+      "repository": {
+        "url": "https://github.com/OPC-Router/portainer-templates",
+        "stackfile": "mqtt-to-email/docker-compose.yml"
+      },
+      "env": [
+        {
+          "name": "INITIAL_USERNAME",
+          "label": "Initial Admin User",
+          "description": "The initial username for the OPC Router admin user.",
+          "default": "admin"
+        },
+        {
+          "name": "INITIAL_PASSWORD",
+          "label": "Initial Admin Password",
+          "description": "The initial password for the OPC Router admin user. The password must be at least 12 characters long.",
+          "default": "OPCRouterStack"
+        },
+        {
+          "name": "OR_I_ACCEPT_EULA",
+          "label": "Accept EULA",
+          "description": "Accept the End User License Agreement",
+          "default": "true",
+          "preset": true
+        }
+      ]
+    },
+    {
+      "type": 3,
+      "title": "OPC UA to MSSQL & Grafana Umati Dashboard",
+      "description": "This stack deploys an OPC Router, MSSQL database, and Grafana for visualizing Umati OPC UA data.",
+      "note": "This stack sets up an OPC Router for data handling, MSSQL database for storing data, and Grafana for visualizing the data.<br/><br/><hr/><strong>After deployment</strong>, you can access the OPC Router and Grafana via the exposed ports.<br/ ><h4><a href='http://localhost:40680'>Open the stack dashboard http://localhost:40680 after successfull deployment</a></h4>",
+      "categories": [
+        "database",
+        "visualization",
+        "management"
+      ],
+      "platform": "linux",
+      "name": "opc-ua-to-mssql-grafana",
+      "logo": "https://raw.githubusercontent.com/OPC-Router/portainer-templates/main/images/opc-router-logo-500x500.png",
+      "repository": {
+        "url": "https://github.com/OPC-Router/portainer-templates",
+        "stackfile": "opcua-mssql-grafana/docker-compose.yml"
+      },
+      "env": [
+        {
+          "name": "INITIAL_USERNAME",
+          "label": "Initial Admin User",
+          "description": "The initial username for the OPC Router and Grafana admin user.",
+          "default": "admin"
+        },
+        {
+          "name": "INITIAL_PASSWORD",
+          "label": "Initial Admin Password",
+          "description": "The initial password for the OPC Router  and Grafana admin user. The password must be at least 12 characters long.",
+          "default": "OPCRouterStack"
+        },
+        {
+          "name": "OR_I_ACCEPT_EULA",
+          "label": "Accept EULA",
+          "description": "Accept the End User License Agreements",
+          "default": "true",
+          "preset": true
+        }
+      ]
+    }
+    
+  ]
+}

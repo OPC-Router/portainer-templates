@@ -54,8 +54,8 @@ services:
     command: >
       sh -c "wget https://github.com/OPC-Router/portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
              unzip -qo /tmp/repo.zip -d /tmp &&
-             cp /tmp/opc-router-portainer-templates-main/opcua-to-rest/config/opc-router.rpe /inray/project.rpe &&
-             cp -r /tmp/opc-router-portainer-templates-main/opcua-to-rest/config/dashboard/* /dashboard/"
+             cp /tmp/portainer-templates-main/opcua-to-rest/config/opc-router.rpe /inray/project.rpe &&
+             cp -r /tmp/portainer-templates-main/opcua-to-rest/config/dashboard/* /dashboard/"
     volumes:
       - opcrouter-config:/inray
       - dashboard:/dashboard

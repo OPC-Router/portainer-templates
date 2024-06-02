@@ -77,9 +77,9 @@ services:
     command: >
       sh -c "wget https://github.com/OPC-Router/portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
              unzip -oq /tmp/repo.zip -d /tmp &&
-             cp /tmp/opc-router-portainer-templates-main/mqtt-to-email/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
-             cp /tmp/opc-router-portainer-templates-main/mqtt-to-email/config/opc-router.rpe /inray/project.rpe &&
-             cp -r /tmp/opc-router-portainer-templates-main/mqtt-to-email/config/dashboard/* /dashboard/"
+             cp /tmp/portainer-templates-main/mqtt-to-email/config/mosquitto.conf /mosquitto/config/mosquitto.conf &&
+             cp /tmp/portainer-templates-main/mqtt-to-email/config/opc-router.rpe /inray/project.rpe &&
+             cp -r /tmp/portainer-templates-main/mqtt-to-email/config/dashboard/* /dashboard/"
     volumes:
       - mosquitto-config:/mosquitto/config
       - opcrouter-config:/inray

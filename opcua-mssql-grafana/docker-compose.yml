@@ -105,7 +105,7 @@ services:
              cp /tmp/opc-ua-umati-mssql-grafana-main/grafana/MachineProductivity.json /grafana/dashboards/MachineProductivity.json &&
              wget https://github.com/OPC-Router/portainer-templates/archive/refs/heads/main.zip -O /tmp/repo.zip &&
              unzip -qo /tmp/repo.zip -d /tmp &&
-             cp -r /tmp/opc-router-portainer-templates-main/opcua-mssql-grafana/config/dashboard/* /dashboard/"
+             cp -r /tmp/portainer-templates-main/opcua-mssql-grafana/config/dashboard/* /dashboard/"
     volumes:
       - mssql-config:/mssql
       - opcrouter-config:/opcrouter
